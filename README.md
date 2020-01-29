@@ -51,4 +51,16 @@ count = 103
 * 需要注意的是， 创建出来的对象的地址就是共享内存的地址，就是基于这个属性，我们的功能才能被实现。也就是说：
 Object* p = new (address) ClassConstruct(...)
 返回p的值， 和输入地址address的值是相同的。
+
+test2 程序说明
+1. 针对定位new运算符分配的内存块， 不需要跟踪哪些内存单元已被使用， 也不用查找未使用的内存块。这些工作全都交给程序猿
+2. 针对常规的new运算符， 需要用delete来释放内存，但对于定位new运算符， 不需要用new来释放内存，因为有时候用delete释放new定位运算符的内存是错误的。
+3. 定位new运算符的另外一种用法：可以与初始化结合使用，从而将信息放在特定的硬件地址处。
+
+定位运算符的其他形式：
+int * p1 = new int; // ivokes new(sizeof(int))
+int * p2 = new(buffer) int; // ivokes new(sizeof(int), buffer)
+int * p3 = new(buffer) int[40]; // ivokes new(40*sizeof(int), buffer)
+定位运算符new函数不可替换， 但是可以重载， 它至少需要接收两个参数。其中第一个总是std::size_t, 指定了请求的字节数。
+
 ```
